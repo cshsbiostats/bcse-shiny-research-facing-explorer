@@ -1,0 +1,41 @@
+---
+title: "B35 AE Explorer Results"
+format:
+  pdf:
+    echo: false
+    message: false
+    warning: false
+    number-sections: true
+    toc: true
+date: today
+params:
+  results: NA
+---
+
+```{r}
+library(tidyverse)
+
+res <- read_rds(params$results)
+
+```
+
+```{r}
+#| results: asis
+
+imap_chr(res, \(x, title) {
+  
+  text <- glue::glue(
+    '# {title}',
+    '```{{r}}',
+    '#| fig-height: 10',
+    '#| fig-width: 8',
+    'x',
+    '```',
+    .sep = '\n'
+  )
+  
+  knitr::knit_child(text = text, quiet = TRUE, envir = environment())
+  
+}) |> cat(sep = '\n')
+```
+

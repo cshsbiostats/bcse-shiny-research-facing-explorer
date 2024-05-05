@@ -39,20 +39,8 @@ b35_ae_explorer_sidebar_UI <- function(id) {
         placement = "right"
       ),
       icon = icon(name = 'chart-bar', lib = 'font-awesome')
-    )
-    # downloadButton(
-    #   NS(id, 'report'),
-    #   tooltip(
-    #     span(
-    #       "Download Report",
-    #       bs_icon("info-circle")
-    #     ),
-    #     "Clicking on the following button will generate a PDF report containing the Sankey diagrams for each selected adverse event.",
-    #     placement = "right"
-    #   ),
-    #   icon = icon(name = 'chart-bar', lib = 'font-awesome')
-    # )
-    
+    ),
+    generate_report_UI(NS(id, 'generate-report'))
     
   )
 }
@@ -197,49 +185,40 @@ b35_ae_explorer_Server <- function(id) {
         
       })
       
-      # output$report <- downloadHandler(
-      #   filename = \(x) {paste0('pro_ctcae_ae_sankey_', Sys.Date(), '.pdf')},
-      #   content = function(file) {
-      #     
-      #     rmarkdown::render(
-      #       'explore_ae_template.Rmd',
-      #       output_file = file,
-      #       params = list('plots' = plots()),
-      #       envir = new.env(parent = globalenv())
-      #     )
-      #     
-      #   }
-      # )
+      generate_report_Server('generate-report', 
+                             template_file = 'b35-ae-explorer-report-template.qmd',
+                             output_file_name = 'thisisatest.pdf',
+                             results = plots())
       
     }
   )
 }
 
-# library(shiny)
-# 
-# run_app <- \() {
-# 
-#   data <- read_csv(here::here('data/u01_b35_data.csv'),
-#                    show_col_types = FALSE)
-# 
-#   trt_options <- data |> pull(trt) |> unique() |> sort()
-# 
-#   ae_options <- data |>
-#     count(ae, trt) |>
-#     count(ae) |>
-#     filter(n == 2) |> pull(ae)
-# 
-#   ui <- fluidPage(
-#     ae_explorer_sidebar_UI('a'),
-#     ae_explorer_main_UI('a')
-#   )
-# 
-#   server <- function(input, output, session) {
-#     ae_explorer_Server('a')
-#   }
-# 
-#   shinyApp(ui, server)
-# 
-# }
-# 
-# run_app()
+library(shiny)
+
+run_app <- \() {
+
+  data <- read_csv(here::here('data/u01_b35_data.csv'),
+                   show_col_types = FALSE)
+
+  trt_options <- data |> pull(trt) |> unique() |> sort()
+
+  ae_options <- data |>
+    count(ae, trt) |>
+    count(ae) |>
+    filter(n == 2) |> pull(ae)
+
+  ui <- fluidPage(
+    b35_ae_explorer_sidebar_UI('a'),
+    b35_ae_explorer_main_UI('a')
+  )
+
+  server <- function(input, output, session) {
+    b35_ae_explorer_Server('a')
+  }
+
+  shinyApp(ui, server)
+
+}
+
+run_app()
