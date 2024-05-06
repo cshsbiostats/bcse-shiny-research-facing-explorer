@@ -6,29 +6,52 @@ format:
     message: false
     warning: false
     number-sections: true
-    toc: false
+    toc: true
 date: today
 params:
   results: NA
 ---
 
 ```{r}
+#| include: false
 library(tidyverse)
 
-# res <- read_rds(params$results)
+res <- read_rds(params$results)
 
 ```
 
-# ```{r}
-# #| fig-height: 5
-# #| fig-width: 15
-# 
-# res$plot
-# ```
-# 
-# ```{r}
-# #| results: asis
-# 
-# res$summary_description
-# ```
-# 
+\newpage
+
+# Sankey Diagram
+
+```{r}
+#| fig-height: 5
+#| fig-width: 10
+#| results: asis
+
+res$sankey
+
+cat('\n\n')
+
+cat(res$summary_description)
+
+```
+
+# Grade Duration
+
+```{r}
+#| fig-height: 5
+#| fig-width: 8
+
+res$grade_duration
+```
+
+# Toxicity Index
+
+```{r}
+#| fig-height: 5
+#| fig-width: 8
+
+res$ti_hist
+
+```
