@@ -1,7 +1,5 @@
-b35_patient_explorer_sidebar_UI <- function(id) {
+b35_patient_explorer_sidebar_UI <- function(id, data) {
   ns <- NS(id)
-  
-  data <- read_csv(here::here('data/u01_b35_data.csv'), show_col_types = FALSE)
   
   trt_options <- data |> pull(trt) |> unique() |> sort()
   
@@ -65,15 +63,7 @@ b35_patient_explorer_sidebar_UI <- function(id) {
       ),
       icon = icon(name = 'chart-bar', lib = 'font-awesome')
     ),
-    downloadButton(
-      NS(id, 'report'),
-      tooltip(
-        span('Download Report', bs_icon("info-circle")),
-        "Clicking on the following button will generate a PDF report containing the Sankey diagrams and results.",
-        placement = "right"
-      ),
-      icon = icon(name = 'chart-bar', lib = 'font-awesome')
-    )
+    generate_report_UI('report')
   )
 }
 
@@ -108,9 +98,7 @@ b35_patient_explorer_main_UI <- function(id) {
   )
 }
 
-b35_patient_explorer_Server <- function(id) {
-  
-  data <- read_csv(here::here('data/u01_b35_data.csv'), show_col_types = FALSE)
+b35_patient_explorer_Server <- function(id, data) {
   
   trt_options <- data |> pull(trt) |> unique() |> sort()
   
@@ -379,21 +367,9 @@ b35_patient_explorer_Server <- function(id) {
       })
       
     })
+
+    generate_report_Server('report')
     
-    output$report <- downloadHandler(
-      filename = \(x) {
-        paste0('pro_ctcae_ae_sankey_', Sys.Date(), '.pdf')
-      },
-      content = function(file) {
-        rmarkdown::render(
-          'explore_qol_template.Rmd',
-          output_file = file,
-          params = list('results' = results()),
-          envir = new.env(parent = globalenv())
-        )
-        
-      }
-    )
   })
 }
 

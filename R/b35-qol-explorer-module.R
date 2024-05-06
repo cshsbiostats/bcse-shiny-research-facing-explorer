@@ -1,8 +1,5 @@
-b35_qol_explorer_sidebar_UI <- function(id) {
+b35_qol_explorer_sidebar_UI <- function(id, data) {
   ns <- NS(id)
-  
-  data <- read_csv(here::here('data/processed_full_qol_pro_data.csv'),
-                   show_col_types = FALSE)
   
   data <- data |>
     select(patientid, trt, time_point_numeric, value, description)
@@ -67,15 +64,7 @@ b35_qol_explorer_sidebar_UI <- function(id) {
       ),
       icon = icon(name = 'chart-bar', lib = 'font-awesome')
     ),
-    downloadButton(
-      NS(id, 'report'),
-      tooltip(
-        span("Download Report", bs_icon("info-circle")),
-        "Clicking on the following button will generate a PDF report containing the Sankey diagrams and summary statement based upon the select patient cohort.",
-        placement = "right"
-      ),
-      icon = icon(name = 'chart-bar', lib = 'font-awesome')
-    )
+    generate_report_UI('report')
   )
 }
 
@@ -99,11 +88,8 @@ b35_qol_explorer_main_UI <- function(id) {
   )
 }
 
-b35_qol_explorer_Server <- function(id) {
+b35_qol_explorer_Server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
-    
-    data <- read_csv(here::here('data/processed_full_qol_pro_data.csv'),
-                     show_col_types = FALSE)
     
     data <- data |>
       select(patientid, trt, time_point_numeric, value, description)
@@ -266,20 +252,7 @@ b35_qol_explorer_Server <- function(id) {
       
     })
     
-    output$report <- downloadHandler(
-      filename = \(x) {
-        paste0('pro_ctcae_ae_sankey_', Sys.Date(), '.pdf')
-      },
-      content = function(file) {
-        rmarkdown::render(
-          'explore_qol_template.Rmd',
-          output_file = file,
-          params = list('results' = results()),
-          envir = new.env(parent = globalenv())
-        )
-        
-      }
-    )
+    generate_report_Server('report')
     
   })
 }

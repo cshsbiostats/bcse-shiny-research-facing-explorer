@@ -11,7 +11,6 @@ generate_report_UI <- function(id) {
 
 generate_report_Server <- function(id, template_file, output_file_name, results) {
   
-  
   moduleServer(
     id,
     function(input, output, session) {

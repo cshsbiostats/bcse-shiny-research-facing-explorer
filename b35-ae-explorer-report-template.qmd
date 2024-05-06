@@ -19,6 +19,8 @@ res <- read_rds(params$results)
 
 ```
 
+\newpage
+
 ```{r}
 #| results: asis
 
@@ -27,7 +29,7 @@ imap_chr(res, \(x, title) {
   text <- glue::glue(
     '# {title}',
     '```{{r}}',
-    '#| fig-height: 10',
+    '#| fig-height: 8',
     '#| fig-width: 8',
     'x',
     '```',

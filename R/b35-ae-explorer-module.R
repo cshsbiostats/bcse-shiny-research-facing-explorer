@@ -1,10 +1,7 @@
 
-b35_ae_explorer_sidebar_UI <- function(id) {
+b35_ae_explorer_sidebar_UI <- function(id, data) {
   ns <- NS(id)
-  
-  data <- read_csv(here::here('data/u01_b35_data.csv'),
-                   show_col_types = FALSE)
-  
+
   trt_options <- data |> pull(trt) |> unique() |> sort()
   
   ae_options <- data |>
@@ -61,7 +58,7 @@ b35_ae_explorer_main_UI <- function(id) {
   )
 }
 
-b35_ae_explorer_Server <- function(id) {
+b35_ae_explorer_Server <- function(id, data) {
   
   make_sankey_diagram <- \(data, trt, ae, cycle_limit = 10) {
     
@@ -128,9 +125,6 @@ b35_ae_explorer_Server <- function(id) {
     
   }
   
-  data <- read_csv(here::here('data/u01_b35_data.csv'),
-                   show_col_types = FALSE)
-  
   trt_options <- data |> pull(trt) |> unique() |> sort()
   
   ae_options <- data |>
@@ -194,31 +188,31 @@ b35_ae_explorer_Server <- function(id) {
   )
 }
 
-library(shiny)
-
-run_app <- \() {
-
-  data <- read_csv(here::here('data/u01_b35_data.csv'),
-                   show_col_types = FALSE)
-
-  trt_options <- data |> pull(trt) |> unique() |> sort()
-
-  ae_options <- data |>
-    count(ae, trt) |>
-    count(ae) |>
-    filter(n == 2) |> pull(ae)
-
-  ui <- fluidPage(
-    b35_ae_explorer_sidebar_UI('a'),
-    b35_ae_explorer_main_UI('a')
-  )
-
-  server <- function(input, output, session) {
-    b35_ae_explorer_Server('a')
-  }
-
-  shinyApp(ui, server)
-
-}
-
-run_app()
+# library(shiny)
+# 
+# run_app <- \() {
+# 
+#   data <- read_csv(here::here('data/u01_b35_data.csv'),
+#                    show_col_types = FALSE)
+# 
+#   trt_options <- data |> pull(trt) |> unique() |> sort()
+# 
+#   ae_options <- data |>
+#     count(ae, trt) |>
+#     count(ae) |>
+#     filter(n == 2) |> pull(ae)
+# 
+#   ui <- fluidPage(
+#     b35_ae_explorer_sidebar_UI('a'),
+#     b35_ae_explorer_main_UI('a')
+#   )
+# 
+#   server <- function(input, output, session) {
+#     b35_ae_explorer_Server('a')
+#   }
+# 
+#   shinyApp(ui, server)
+# 
+# }
+# 
+# run_app()
