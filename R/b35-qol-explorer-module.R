@@ -64,7 +64,7 @@ b35_qol_explorer_sidebar_UI <- function(id, data) {
       ),
       icon = icon(name = 'chart-bar', lib = 'font-awesome')
     ),
-    generate_report_UI('report')
+    generate_report_UI(NS(id, 'generate-report'))
   )
 }
 
@@ -252,7 +252,12 @@ b35_qol_explorer_Server <- function(id, data) {
       
     })
     
-    generate_report_Server('report')
+    report_file_name <- glue::glue('b35-qol-explorer-results-{Sys.Date()}.pdf')
+    
+    generate_report_Server('generate-report',
+                           template_file = 'b35-qol-explorer-report-template.qmd', 
+                           output_file_name = report_file_name, 
+                           results = results())
     
   })
 }

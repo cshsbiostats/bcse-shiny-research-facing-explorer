@@ -1,0 +1,34 @@
+---
+title: "B35 QOL Explorer Results"
+format:
+  pdf:
+    echo: false
+    message: false
+    warning: false
+    number-sections: true
+    toc: false
+date: today
+params:
+  results: NA
+---
+
+```{r}
+library(tidyverse)
+
+res <- read_rds(params$results)
+
+```
+
+```{r}
+#| fig-height: 5
+#| fig-width: 15
+
+res$plot
+```
+
+```{r}
+#| results: asis
+
+res$summary_description
+```
+

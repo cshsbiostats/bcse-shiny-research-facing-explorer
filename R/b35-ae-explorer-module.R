@@ -179,9 +179,11 @@ b35_ae_explorer_Server <- function(id, data) {
         
       })
       
+      report_file_name <- glue::glue('b35-ae-explorer-results-{Sys.Date()}.pdf')
+      
       generate_report_Server('generate-report', 
                              template_file = 'b35-ae-explorer-report-template.qmd',
-                             output_file_name = 'thisisatest.pdf',
+                             output_file_name = report_file_name,
                              results = plots())
       
     }
