@@ -25,7 +25,7 @@ b35_custom_explorer_module_main_UI <- function(id) {
       card_header('Custom AE/QOL Explorer'),
       card_body(
         'The custom AE/QOL explorer allows the investigator to upload their own data in the application for generating Sankey diagrams. Please utilize the following file as a reference on the structure the application requires for data upload.  No data is saved or stored by the application; all data is processed and removed upon exiting the session.',
-        tags$a(href = "https://raw.githubusercontent.com/cshsbiostats/breast-cancer-symptom-explorer/master/res/custom_sankey_data_template.csv", target = '_blank', "Download Data Template")
+        tags$a(href = "https://raw.githubusercontent.com/cshsbiostats/breast-cancer-symptom-explorer/master/res/custom_sankey_data_template.csv", target = '_blank', download = 'custom-sankey-data-template.csv', "Download Data Template")
       ),
       full_screen = TRUE,
       fill = TRUE,
